@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import styles from '../styles/styles';
 import {remove, removeAll} from '../store/cartSlice';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Toast from 'react-native-toast-message';
 
 export default function Cart({navigation}) {
   const cartItems = useSelector(state => state.cart);
@@ -20,7 +21,12 @@ export default function Cart({navigation}) {
     .map(x => x.price)
     .reduce((partialSum, a) => partialSum + a, 0)
     .toFixed(0);
-
+  const showToast = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'REMOVED FROM CART',
+    });
+  };
   console.log(totalPrice);
   return (
     <>
@@ -30,6 +36,7 @@ export default function Cart({navigation}) {
           uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdXAD4gvEH1Jk95I6Mzpbuch-xTwyGsNWVfvlabw9ZXlJ9tGQthpyKMXfKz-rbvenbowA&usqp=CAU',
         }}
         style={styles.wrapper}>
+        <Toast topOffset={true} visibilityTime={1000} />
         <ScrollView>
           <View>
             {cartItems && cartItems.length > 0 ? (
@@ -87,7 +94,10 @@ export default function Cart({navigation}) {
                     </View>
                     <View>
                       <TouchableOpacity
-                        onPress={() => dispatch(remove(x.id))}
+                        onPress={() => {
+                          dispatch(remove(x.id));
+                          showToast();
+                        }}
                         activeOpacity={0.6}
                         style={{
                           // backgroundColor: 'red',

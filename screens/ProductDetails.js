@@ -9,10 +9,17 @@ import {
 import styles from '../styles/styles';
 import {add} from '../store/cartSlice';
 import {useDispatch, useSelector} from 'react-redux';
+import Toast from 'react-native-toast-message';
 
 export default function ProductDetails({route, navigation}) {
   const dispatch = useDispatch();
   const items = useSelector(state => state.cart);
+  const showToast = () => {
+    Toast.show({
+      type: 'info',
+      text1: 'ADDED TO CART',
+    });
+  };
   return (
     <>
       <ImageBackground
@@ -48,6 +55,7 @@ export default function ProductDetails({route, navigation}) {
               style={{width: 250, height: 250, margin: 5}}
               source={{uri: route.params.image}}
             />
+            <Toast topOffset={true} visibilityTime={1000} />
             <View>
               <Text
                 style={{
@@ -116,6 +124,7 @@ export default function ProductDetails({route, navigation}) {
                   dispatch(add(route.params));
                   // console.log(route.params);
                   console.log(items);
+                  showToast();
                 }}>
                 <Text
                   style={{color: 'white', fontWeight: 'bold', fontSize: 20}}>
