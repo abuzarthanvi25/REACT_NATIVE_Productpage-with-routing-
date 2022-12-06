@@ -17,11 +17,15 @@ import styles from '../styles/styles';
 export default function Products({navigation}) {
   const [products, setProducts] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [filteredData, setFilteredData] = useState([]);
+
   let getProducts = () => {
     axios.get('https://fakestoreapi.com/products').then(res => {
       setProducts([...res.data]);
+      console.log(res);
     });
+    // fetch('https://fakestoreapi.com/products')
+    //   .then(response => response.json())
+    //   .then(data => setProducts([...data]));
   };
 
   let handleRefresh = () => {
@@ -35,7 +39,7 @@ export default function Products({navigation}) {
 
   useEffect(() => {
     getProducts();
-    products ? console.log(products) : null;
+    // products ? console.log(products) : null;
   }, []);
 
   const searchProducts = searchQuery => {
@@ -129,44 +133,13 @@ export default function Products({navigation}) {
               flexWrap: 'wrap',
               justifyContent: 'center',
               alignItems: 'center',
-            }}>
-            {filteredData && filteredData.length > 0
-              ? filteredData.map(x => (
-                  <View
-                    key={x.id}
-                    style={{
-                      flexDirection: 'column',
-                      flexWrap: 'wrap',
-                    }}>
-                    <TouchableOpacity style={styles.productContainer}>
-                      <Text style={styles.category}>
-                        {x.category.toUpperCase()}
-                      </Text>
-                      <Image
-                        resizeMode="contain"
-                        style={styles.image}
-                        source={{uri: x.image}}
-                      />
-                      <Text style={styles.title}>
-                        {x.title.slice(0, 20) +
-                          (x.title.length > 20 ? '...' : '')}
-                      </Text>
-                      <Text style={styles.price}>${x.price}</Text>
-                      <View style={styles.ratingContainer}>
-                        <Text style={styles.ratings}>
-                          Rating: {x.rating.rate}
-                        </Text>
-                        <Text style={styles.quantityAvailable}>
-                          Quantity Available: {x.rating.count}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                ))
-              : // <ActivityIndicator size={90} />
-                null}
-          </View>
+            }}></View>
         </ScrollView>
+        {/* <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen name="Settings" component={SettingsScreen} />
+          </Tab.Navigator>
+        </NavigationContainer> */}
       </ImageBackground>
     </>
   );

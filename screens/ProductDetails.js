@@ -1,9 +1,18 @@
 import React from 'react';
-import {Image, ImageBackground, Text, View} from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import styles from '../styles/styles';
+import {add} from '../store/cartSlice';
+import {useDispatch, useSelector} from 'react-redux';
 
 export default function ProductDetails({route, navigation}) {
-  //   console.log(route.params.e.title);
+  const dispatch = useDispatch();
+  const items = useSelector(state => state.cart);
   return (
     <>
       <ImageBackground
@@ -22,7 +31,7 @@ export default function ProductDetails({route, navigation}) {
               justifyContent: 'center',
               flexWrap: 'wrap',
               borderRadius: 30,
-              padding: 20,
+              padding: 10,
               height: '100%',
               shadowColor: '#000',
               shadowOffset: {
@@ -36,13 +45,13 @@ export default function ProductDetails({route, navigation}) {
             }}>
             <Image
               resizeMode="contain"
-              style={{width: 250, height: 250}}
+              style={{width: 250, height: 250, margin: 5}}
               source={{uri: route.params.image}}
             />
             <View>
               <Text
                 style={{
-                  fontSize: 26,
+                  fontSize: 25,
                   color: '#222',
                   fontWeight: 'bold',
                   marginLeft: 10,
@@ -53,7 +62,7 @@ export default function ProductDetails({route, navigation}) {
             </View>
             <Text
               style={{
-                fontSize: 35,
+                fontSize: 33,
                 color: '#FF4335',
                 fontWeight: 'bold',
                 marginLeft: 10,
@@ -68,17 +77,51 @@ export default function ProductDetails({route, navigation}) {
                   fontWeight: 'bold',
                   margin: 10,
                 }}>
-                {route.params.description.slice(0, 300) +
-                  (route.params.description.length > 300 ? '...' : '')}
+                {route.params.description.slice(0, 200) +
+                  (route.params.description.length > 200 ? '...' : '')}
               </Text>
             </View>
             <View style={styles.ratingContainer}>
-              <Text style={[styles.ratings, {marginLeft: 10}]}>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: '#FFBA20',
+                  textAlign: 'left',
+                  marginLeft: 10,
+                  fontSize: 15,
+                }}>
                 Rating: {route.params.rating.rate}
               </Text>
-              <Text style={[styles.quantityAvailable, {marginLeft: 10}]}>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: '#00B54A',
+                  textAlign: 'left',
+                  marginLeft: 10,
+                  fontSize: 15,
+                }}>
                 Quantity Available: {route.params.rating.count}
               </Text>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#FF4335',
+                  paddingHorizontal: 25,
+                  paddingVertical: 10,
+                  borderRadius: 20,
+                  marginTop: 12,
+                }}
+                onPress={() => {
+                  dispatch(add(route.params));
+                  // console.log(route.params);
+                  console.log(items);
+                }}>
+                <Text
+                  style={{color: 'white', fontWeight: 'bold', fontSize: 20}}>
+                  Add To Cart
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
